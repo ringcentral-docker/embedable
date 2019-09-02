@@ -1,0 +1,23 @@
+sudo: required
+language: ruby
+services:
+  - docker
+env:
+  global:
+    - IMAGE_NAME=ringcentral/rc-embeddable-dev
+before_script:
+  - cd image
+  - version="$(awk -F '[:-]'  '/FROM/ {print $2}' Dockerfile)"
+script:
+  - docker build -t "${IMAGE_NAME}" -f "Dockerfile" .
+after_script:
+  - docker images
+before_deploy:
+  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+  - docker tag "$IMAGE_NAME" "${IMAGE_NAME}:latest"
+  - docker tag "$IMAGE_NAME" "${IMAGE_NAME}:${version}"
+deploy:
+  provider: script
+  script: docker push "${IMAGE_NAME}:${DOCKERFILE_NAME}"
+  on:
+    branch: master
