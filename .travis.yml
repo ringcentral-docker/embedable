@@ -1,23 +1,25 @@
 sudo: required
 language: ruby
 services:
-  - docker
+- docker
 env:
   global:
-    - IMAGE_NAME=ringcentral/rc-embeddable-dev
+  - IMAGE_NAME=ringcentral/rc-embeddable-dev
+  - secure: EIr2RhcdspdHBeDFOPc2EtGfTHhdWQ52FBPMdoIASZ4Jm08YIi9GmZfFhttI7Ns+bfmwXFQzmKYoU6GZj0P8E6JmsFG28s3izVsCiuTcPHwxpd103aL8uaIpBT35ElGUMLKRaOw6kEaj4/E8glyV0ZewLUhNLlvkYkFypCcK0wuzHTEj57lfIOIWaM2U2v5ajQfMG+yoj+SQ1vUN6o6VfwWPh/fwO03M9NxjKDOXB/10JFNWm1YJ3olSn+ZakXHfCY4DyBuqAhuovtLMSEXVGLRD6a3StgDNPHbPMjNWAP3bAIjs0Z16YjgmTy/9kirQRAIg10gxzUqDqs0kx/duUTJbKJofVah9AG84SQkz66ldIWlOF3JX3epXty74ZVmT6f4vWXczKobCW8XsD4kyWZiP/EEEQAf/eFAGdk614iiQEvY5DbxggfZuAFf5ROi4fng/8u9cWG5dXY7n0XWIurgbn0+HxXoW8cazIvfOFiUNXkcIskyaX/SufbAHv6hY/DpxsA97uRtAWz8Ych4UfWaqkyT2+L6mH4mTxT2+dICSjxV0QrDGdV6Ezix5uoe4FKh+Aj8PLVe5aF/Fo7d9hUBbzrYw8OuLbLdi4uylacPEtD/RG5OIaeOKy4VMO1YjlNyW4TKSkVsXML1H2AuG9bd1xLJgT8gNgQaoOaC8QcI=
+  - secure: pEH+GW/TLD7NtsiEMnwfH5DMVOKYkQcMtzwYGqrpIaart/guCJthKUp61c9IGMtDIq+OzyN/5cn+KUAO42plFyt756GRdcr0bTW4GS0yuB9JsY3pLreART7j0mSaBborlLJ1dbOgV21pZx0DtM9J+EKZStKx/aQjpMWSf4A2xHtWb+lFXT3MPLyEP8w5FTXAKRc8T1+QxHV5Aab3ZKaw+7R1UdsNfZSYFf+ThL7OiGDjgakxO0yNNK8Jkxel2mXtThh4N9QYm0KOVdAzzav5GLGk2DFHXvDvJVhrrGMluq9yTgPF2esK2E3yObjnhJSZe0Bk5cDPPf/mVxqShfy1KgQjU6XFaltZLBMXIwpFnrbSQYKjMOOFOmrQfUSoR8NM5rYGFd1vMxOPCuf9tuQQ9l3e7ckSMX36m170OeyYujdJkNzr3xmyfTVa6IHhXYA4UonP28Pxsoo+hvjMKombie96Vq7eB78s/iGk5TLJ6AucWJNwTi3B6D6ANtbUkZPbRVCgvsjzzyaNahnf1plqzzc/Gy33NCYEMSciu7N2k5Mxkc+nP1Nqg93vYjBiBnBjeo8PcVS7W0zyXN0tpP4zj02YQtgA3V2zUaBZFQ/IFqIdvP/nB/1GaWKnBPpAdgthTT91ftEuDEmBdJeckjLS/ESU7TOplSEfHnPSOVkS0AE=
 before_script:
-  - cd image
-  - version="$(awk -F '[:-]'  '/FROM/ {print $2}' Dockerfile)"
+- cd image
+- version="$(awk -F '[:-]'  '/FROM/ {print $2}' Dockerfile)"
 script:
-  - docker build -t "${IMAGE_NAME}" -f "Dockerfile" .
+- docker build -t "${IMAGE_NAME}" -f "Dockerfile" .
 after_script:
-  - docker images
+- docker images
 before_deploy:
-  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
-  - docker tag "$IMAGE_NAME" "${IMAGE_NAME}:latest"
-  - docker tag "$IMAGE_NAME" "${IMAGE_NAME}:${version}"
+- docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+- docker tag "$IMAGE_NAME" "${IMAGE_NAME}:latest"
+- docker tag "$IMAGE_NAME" "${IMAGE_NAME}:${version}"
 deploy:
-  provider: script
+  provider: script 
   script: docker push "${IMAGE_NAME}:${DOCKERFILE_NAME}"
   on:
     branch: master
