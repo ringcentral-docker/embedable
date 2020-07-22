@@ -26,7 +26,6 @@ jobs:
         run: |
           cd image
           IMAGE_NAME=ringcentral/rc-embeddable-dev
-          GH_DOCKER_PKG_IMAGE_NAME=docker.pkg.github.com/ringcentral-docker/rc-embeddable-dev/rc-embeddable-dev
           VERSION="$(awk -F '[:-]'  '/FROM/ {print $2}' Dockerfile)"
           docker build --tag ${IMAGE_NAME} --file Dockerfile .
           docker tag "${IMAGE_NAME}" "${IMAGE_NAME}:${VERSION}"
@@ -34,9 +33,3 @@ jobs:
           
           docker push "${IMAGE_NAME}:${VERSION}"
           docker push "${IMAGE_NAME}:latest"
-
-          docker tag "${IMAGE_NAME}" "${GH_DOCKER_PKG_IMAGE_NAME}:${VERSION}"
-          docker tag "${IMAGE_NAME}" "${GH_DOCKER_PKG_IMAGE_NAME}:latest"
-
-          docker push "${GH_DOCKER_PKG_IMAGE_NAME}:${VERSION}"
-          docker push "${GH_DOCKER_PKG_IMAGE_NAME}:latest"
